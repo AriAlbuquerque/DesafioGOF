@@ -14,25 +14,33 @@ import java.util.Optional;
 @Service
 public class ClienteServiceImpl implements ClientService {
     @Autowired
-    private ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
     @Autowired
-    private EnderecoRepository enderecoRepository;
+    private final EnderecoRepository enderecoRepository;
     @Autowired
-    private ViaCepService viaCepService;
+    private final ViaCepService viaCepService;
+
+    public ClienteServiceImpl(ClientRepository clientRepository, EnderecoRepository enderecoRepository, ViaCepService viaCepService) {
+        this.clientRepository = clientRepository;
+        this.enderecoRepository = enderecoRepository;
+        this.viaCepService = viaCepService;
+    }
 
 
     @Override
-    public Iterable<Cliente> buscarTodos(){
+    public Iterable<Cliente> buscarTodos() {
 
         return clientRepository.findAll();
     }
+
     @Override
-    public Cliente buscarPorId(Long id){
-      Optional<Cliente> cliente = clientRepository.findAllById(id);
+    public Cliente buscarPorId(Long id) {
+        Optional<Cliente> cliente = clientRepository.findAllById(id);
         return cliente.get();
     }
+
     @Override
-    public void inserir(Cliente cliente){
+    public void inserir(Cliente cliente) {
         SalvarNovoClienteComCep(cliente);
     }
 
@@ -48,15 +56,16 @@ public class ClienteServiceImpl implements ClientService {
     }
 
     @Override
-    public void atualizar(Long id, Cliente cliente){
+    public void atualizar(Long id, Cliente cliente) {
         Optional<Cliente> clienteDb = clientRepository.findAllById(id);
-        if (clienteDb.isPresent()){
+        if (clienteDb.isPresent()) {
             SalvarNovoClienteComCep(cliente);
 
         }
     }
+
     @Override
-    public void deletar(Long id){
+    public void deletar(Long id) {
         clientRepository.deleteById(id);
 
     }
